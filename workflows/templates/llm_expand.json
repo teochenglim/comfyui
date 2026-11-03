@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "id": "llm_expand",
+    "description": "Expand a short idea into a video prompt with an LLM (default z.ai GLM; provider=openrouter|nvidia for free models).",
+    "required_secrets": [],
+    "overridable_fields": {
+      "prompt": [
+        "1.inputs.prompt"
+      ],
+      "provider": [
+        "1.inputs.provider"
+      ],
+      "model": [
+        "1.inputs.model"
+      ]
+    }
+  },
+  "1": {
+    "class_type": "RemoteLLMChat",
+    "inputs": {
+      "prompt": "a cat surfing a wave at sunset",
+      "system_prompt": "You are a cinematic video prompt writer. Expand the idea into one vivid paragraph (<=80 words): subject, motion, camera, lighting, style. Output only the prompt.",
+      "provider": "zai",
+      "model": "",
+      "temperature": 0.7,
+      "max_tokens": 2048
+    }
+  },
+  "2": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "1",
+        0
+      ]
+    }
+  }
+}

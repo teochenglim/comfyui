@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "id": "vlm_to_clip",
+    "description": "Image -> free VLM caption -> Placeholder Clip zooming on the image. Use --image PATH.",
+    "required_secrets": [],
+    "overridable_fields": {
+      "image": [
+        "1.inputs.image"
+      ],
+      "provider": [
+        "2.inputs.provider"
+      ],
+      "duration": [
+        "3.inputs.duration"
+      ]
+    }
+  },
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example.png"
+    }
+  },
+  "2": {
+    "class_type": "RemoteVLMChat",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "prompt": "Describe this image in one sentence as a short video prompt with motion.",
+      "provider": "openrouter",
+      "model": "",
+      "max_tokens": 2048,
+      "max_side": 1024
+    }
+  },
+  "3": {
+    "class_type": "PlaceholderClip",
+    "inputs": {
+      "prompt": [
+        "2",
+        0
+      ],
+      "duration": 2,
+      "fps": 8,
+      "width": 640,
+      "height": 360,
+      "first_frame": [
+        "1",
+        0
+      ]
+    }
+  },
+  "4": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "2",
+        0
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "id": "vlm_caption",
+    "description": "Describe an image with a free VLM (provider=openrouter|nvidia). Use --image PATH.",
+    "required_secrets": [],
+    "overridable_fields": {
+      "image": [
+        "1.inputs.image"
+      ],
+      "prompt": [
+        "2.inputs.prompt"
+      ],
+      "provider": [
+        "2.inputs.provider"
+      ],
+      "model": [
+        "2.inputs.model"
+      ]
+    }
+  },
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "example.png"
+    }
+  },
+  "2": {
+    "class_type": "RemoteVLMChat",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "prompt": "Describe this image in detail for use as a video prompt.",
+      "provider": "openrouter",
+      "model": "",
+      "max_tokens": 2048,
+      "max_side": 1024
+    }
+  },
+  "3": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "2",
+        0
+      ]
+    }
+  }
+}

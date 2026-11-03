@@ -1,0 +1,35 @@
+{
+  "_meta": {
+    "id": "nvidia_storyboard_video",
+    "description": "Free: NVIDIA LLM writes a scene-per-line script, Storyboard Video renders it to an H.264 MP4 (no video model, zero cost).",
+    "required_secrets": ["NVIDIA_API_KEY"],
+    "overridable_fields": {
+      "prompt": ["1.inputs.prompt"],
+      "seconds_per_scene": ["2.inputs.seconds_per_scene"],
+      "title": ["2.inputs.title"]
+    }
+  },
+  "1": {
+    "class_type": "RemoteLLMChat",
+    "inputs": {
+      "prompt": "A 20-second explainer: how a lighthouse guides ships at night",
+      "system_prompt": "You are a video scriptwriter. Write exactly 6 scenes for a short video. One scene per line, each a single punchy sentence of at most 14 words, no numbering, no blank lines, no extra commentary.",
+      "provider": "nvidia",
+      "model": "",
+      "temperature": 0.7,
+      "max_tokens": 2048
+    }
+  },
+  "2": {
+    "class_type": "StoryboardVideo",
+    "inputs": {
+      "script": ["1", 0],
+      "title": "Lighthouse",
+      "seconds_per_scene": 3.0,
+      "fps": 24,
+      "width": 1280,
+      "height": 720,
+      "max_scenes": 8
+    }
+  }
+}

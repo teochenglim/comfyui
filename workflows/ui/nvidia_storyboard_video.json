@@ -1,0 +1,190 @@
+{
+  "id": "00000000-0000-4000-8000-0000000000c2",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "RemoteLLMChat",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        420,
+        330
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "RemoteLLMChat"
+      },
+      "widgets_values": [
+        "A 20-second explainer: how a lighthouse guides ships at night",
+        "You are a video scriptwriter. Write exactly 6 scenes for a short video. One scene per line, each a single punchy sentence of at most 14 words, no numbering, no blank lines, no extra commentary.",
+        "nvidia",
+        "",
+        0.7,
+        2048
+      ]
+    },
+    {
+      "id": 2,
+      "type": "StoryboardVideo",
+      "pos": [
+        520,
+        80
+      ],
+      "size": [
+        420,
+        420
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "script",
+          "type": "STRING",
+          "widget": {
+            "name": "script"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_path",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            3
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "StoryboardVideo"
+      },
+      "widgets_values": [
+        "",
+        "Lighthouse",
+        3,
+        24,
+        1280,
+        720,
+        8,
+        "auto",
+        0.5
+      ]
+    },
+    {
+      "id": 3,
+      "type": "PreviewAny",
+      "pos": [
+        960,
+        80
+      ],
+      "size": [
+        320,
+        120
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 4,
+      "type": "SaveVideo",
+      "pos": [
+        940,
+        260
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 3
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveVideo"
+      },
+      "widgets_values": [
+        "video/storyboard",
+        "auto",
+        "auto"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      2,
+      1,
+      4,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

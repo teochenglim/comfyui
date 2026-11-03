@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "comfyui": {
+      "command": "npx",
+      "args": ["-y", "comfyui-mcp@0.52.206"],
+      "env": {
+        "COMFYUI_URL": "http://localhost:8188",
+        "COMFYUI_MCP_FORCE_REMOTE": "1"
+      }
+    }
+  }
+}

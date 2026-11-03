@@ -1,0 +1,30 @@
+# Run via `make up` (it exports versions.env + HOST_UID/GID).
+name: comfyui
+services:
+  comfyui:
+    image: comfyui-local:latest
+    build:
+      context: .
+      args:
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        UV_VERSION: ${UV_VERSION}
+        COMFYUI_REF: ${COMFYUI_REF}
+        MANAGER_REF: ${MANAGER_REF}
+        INSTALL_MANAGER: ${INSTALL_MANAGER:-false}
+    platform: linux/arm64
+    # Host uid so bind mounts on colima/virtiofs are writable.
+    user: "${HOST_UID:-501}:${HOST_GID:-20}"
+    env_file: [.env]
+    ports:
+      - "127.0.0.1:${COMFYUI_PORT:-8188}:8188"   # loopback only
+    volumes:
+      - ./output:/app/ComfyUI/output
+      - ./input:/app/ComfyUI/input
+      - ./user:/app/ComfyUI/user
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8188/system_stats"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s

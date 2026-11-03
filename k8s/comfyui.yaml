@@ -1,0 +1,41 @@
+# Secret `comfyui-env` is created by `make k8s-up` from .env (never committed).
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: {name: comfyui-output, namespace: comfyui}
+spec: {accessModes: [ReadWriteOnce], resources: {requests: {storage: 10Gi}}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: {name: comfyui-user, namespace: comfyui}
+spec: {accessModes: [ReadWriteOnce], resources: {requests: {storage: 1Gi}}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: comfyui, namespace: comfyui}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: comfyui}}
+  template:
+    metadata: {labels: {app: comfyui}}
+    spec:
+      securityContext: {runAsUser: 1000, runAsGroup: 1000, fsGroup: 1000}
+      containers:
+        - name: comfyui
+          image: comfyui-local:latest
+          imagePullPolicy: Never   # built locally; colima docker+k3s share the image store
+          ports: [{containerPort: 8188}]
+          envFrom: [{secretRef: {name: comfyui-env}}]
+          resources: {requests: {cpu: "1", memory: 2Gi}, limits: {memory: 6Gi}}
+          readinessProbe: {httpGet: {path: /system_stats, port: 8188}, periodSeconds: 10, failureThreshold: 18}
+          volumeMounts:
+            - {name: output, mountPath: /app/ComfyUI/output}
+            - {name: user, mountPath: /app/ComfyUI/user}
+      volumes:
+        - {name: output, persistentVolumeClaim: {claimName: comfyui-output}}
+        - {name: user, persistentVolumeClaim: {claimName: comfyui-user}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: comfyui, namespace: comfyui}
+spec: {selector: {app: comfyui}, ports: [{port: 8188, targetPort: 8188}]}
